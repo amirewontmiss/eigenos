@@ -1,0 +1,36 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@quantum/*": ["quantum/*"],
+      "@core/*": ["core/*"],
+      "@utils/*": ["utils/*"],
+      "@renderer/*": ["renderer/*"],
+      "@components/*": ["renderer/components/*"],
+      "@hooks/*": ["renderer/hooks/*"],
+      "@services/*": ["renderer/services/*"],
+      "@styles/*": ["renderer/styles/*"],
+      "@assets/*": ["renderer/assets/*"]
+    }
+  },
+  "include": [
+    "src/renderer/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/main.ts",
+    "src/preload.ts"
+  ]
+}

@@ -1,10 +1,13 @@
 import axios, { AxiosInstance } from 'axios';
+import { QuantumProvider, QuantumJob } from '../quantum-provider.interface';
 import { 
-  QuantumProvider, 
-  QuantumJob, 
   IBMCredentials, 
-  IBMProviderConfig 
-} from '../quantum-provider.interface';
+  IBMProviderConfig, 
+  IBMDeviceData,
+  IBMJobSubmissionResult,
+  IBMJobStatusResult,
+  IBMJobResultsData
+} from './ibm-interfaces';
 import { 
   QuantumDevice, 
   ProviderCapabilities, 
@@ -159,7 +162,7 @@ except Exception as e:
         throw new Error(`Failed to fetch IBM devices: ${devicesData.error}`);
       }
 
-      return devicesData.map((data: any) => this.mapToQuantumDevice(data));
+      return devicesData.map((data: IBMDeviceData) => this.mapToQuantumDevice(data));
     } catch (error: any) {
       this.logger.error('Failed to get IBM devices', error);
       throw error;
@@ -217,10 +220,10 @@ except Exception as e:
 
     try {
       const result = await this.pythonBridge.execute(pythonCode);
-      const submissionData = JSON.parse(result.stdout);
+      const submissionData: IBMJobSubmissionResult = JSON.parse(result.stdout);
       
-      if (submissionData.error) {
-        throw new Error(`Failed to submit job to IBM: ${submissionData.error}`);
+      if ('error' in submissionData) {
+        throw new Error(`Failed to submit job to IBM: ${(submissionData as any).error}`);
       }
 
       return {
@@ -398,7 +401,7 @@ except Exception as e:
     return 300000; // 5 minutes default
   }
 
-  private mapToQuantumDevice(data: any): QuantumDevice {
+  private mapToQuantumDevice(data: IBMDeviceData): QuantumDevice {
     const topology: QuantumTopology = {
       couplingMap: data.coupling_map || [],
       qubitCount: data.qubits,

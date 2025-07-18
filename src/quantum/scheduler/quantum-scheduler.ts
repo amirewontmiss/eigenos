@@ -1,6 +1,7 @@
+import { EventEmitter } from 'events';
 import { PriorityQueue } from 'typescript-collections';
 import { QuantumJob, UserInfo } from '../providers/quantum-provider.interface';
-import { QuantumDevice } from '../core/interfaces/quantum-device.interface';
+import { QuantumDevice, DeviceStatus } from '../core/interfaces/quantum-device.interface';
 import { QuantumCircuit } from '../core/circuit/quantum-circuit';
 
 export interface SchedulingDecision {
@@ -49,17 +50,17 @@ export class DeviceMonitor {
 
     // Factor in device status
     switch (device.status) {
-      case 'online':
+      case DeviceStatus.ONLINE:
         healthScore *= 1.0;
         break;
-      case 'maintenance':
+      case DeviceStatus.MAINTENANCE:
         healthScore *= 0.3;
         break;
-      case 'calibrating':
+      case DeviceStatus.CALIBRATING:
         healthScore *= 0.7;
         break;
-      case 'offline':
-      case 'error':
+      case DeviceStatus.OFFLINE:
+      case DeviceStatus.ERROR:
         healthScore *= 0.0;
         break;
     }
@@ -152,24 +153,41 @@ export class PerformancePredictor {
   }
 }
 
-export class QuantumScheduler {
+export class QuantumScheduler extends EventEmitter {
   private readonly jobQueues = new Map<string, PriorityQueue<QuantumJob>>();
   private readonly runningJobs = new Map<string, QuantumJob>();
   private readonly deviceMonitor: DeviceMonitor;
   private readonly costOptimizer: CostOptimizer;
   private readonly performancePredictor: PerformancePredictor;
+  private initialized = false;
   
   constructor(
-    private readonly deviceRegistry: DeviceRegistry,
-    private readonly userService: UserService,
-    private readonly metricsCollector: MetricsCollector,
-    private readonly logger: Logger
+    private readonly deviceRegistry?: DeviceRegistry,
+    private readonly userService?: UserService,
+    private readonly metricsCollector?: MetricsCollector,
+    private readonly logger?: Logger
   ) {
-    this.deviceMonitor = new DeviceMonitor(deviceRegistry);
-    this.costOptimizer = new CostOptimizer();
-    this.performancePredictor = new PerformancePredictor(metricsCollector);
-    
-    this.initializeScheduler();
+    super();
+    if (deviceRegistry && userService && metricsCollector && logger) {
+      this.deviceMonitor = new DeviceMonitor(deviceRegistry);
+      this.costOptimizer = new CostOptimizer();
+      this.performancePredictor = new PerformancePredictor(metricsCollector);
+      this.initializeScheduler();
+    }
+  }
+
+  async initialize(databaseService?: any): Promise<void> {
+    this.initialized = true;
+    this.emit('initialized');
+  }
+
+  isInitialized(): boolean {
+    return this.initialized;
+  }
+
+  async destroy(): Promise<void> {
+    this.removeAllListeners();
+    this.initialized = false;
   }
 
   private initializeScheduler(): void {
@@ -263,7 +281,7 @@ export class QuantumScheduler {
       }
       
       // Check if device is operational
-      if (device.status === 'offline' || device.status === 'error') return false;
+      if (device.status === DeviceStatus.OFFLINE || device.status === DeviceStatus.ERROR) return false;
       
       // Check user preferences
       const preferredProviders = job.user.preferences.preferredProviders;
@@ -442,7 +460,7 @@ export class QuantumScheduler {
       if (this.runningJobs.has(deviceId)) continue;
       
       const device = await this.deviceRegistry.getDevice(deviceId);
-      if (!device || device.status !== 'online') continue;
+      if (!device || device.status !== DeviceStatus.ONLINE) continue;
       
       // Get next job from queue
       const job = queue.dequeue();

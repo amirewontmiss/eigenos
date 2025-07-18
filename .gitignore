@@ -55,6 +55,23 @@ temp/
 .env
 .env.local
 .env.production
+.env.development.local
+.env.test.local
+*.db
+*.sqlite
+*.sqlite3
+quantumos.db
+backups/
+*.backup
+*.bak
+config-export.json
+quantum-results/
+circuit-cache/
+
+# Quantum provider credentials
+ibm-credentials.json
+google-credentials.json
+aws-credentials.json
 
 # Python
 __pycache__/
@@ -65,6 +82,11 @@ __pycache__/
 env/
 venv/
 quantum-env/
+ENV/
+env.bak/
+venv.bak/
+.ipynb_checkpoints
+.pytest_cache/
 
 # Electron
 out/

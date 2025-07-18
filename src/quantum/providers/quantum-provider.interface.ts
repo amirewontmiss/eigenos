@@ -7,10 +7,11 @@ import {
   JobStatus, 
   QuantumResults 
 } from '../core/interfaces/quantum-device.interface';
+import { QuantumCircuit } from '../core/circuit/quantum-circuit';
 
 export interface QuantumJob {
   readonly id: string;
-  readonly circuit: any; // Will be properly typed with QuantumCircuit
+  readonly circuit: QuantumCircuit;
   readonly device: QuantumDevice;
   readonly shots: number;
   readonly user: UserInfo;

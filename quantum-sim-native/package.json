@@ -1,0 +1,22 @@
+{
+  "name": "quantum-sim-native",
+  "version": "0.1.0",
+  "description": "High-performance native quantum simulation module",
+  "main": "index.node",
+  "scripts": {
+    "build": "cargo-cp-artifact -nc index.node -- cargo build --message-format=json-render-diagnostics",
+    "build-debug": "npm run build --",
+    "build-release": "npm run build -- --release",
+    "install": "npm run build-release",
+    "test": "cargo test"
+  },
+  "devDependencies": {
+    "cargo-cp-artifact": "^0.1"
+  },
+  "binary": {
+    "module_name": "quantum_sim_native",
+    "module_path": "./native",
+    "package_name": "quantum-sim-native",
+    "host": "https://github.com"
+  }
+}

@@ -1,0 +1,305 @@
+.quantum-canvas-container {
+  position: relative;
+  background: var(--background-primary);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-primary);
+}
+
+.quantum-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  background: transparent;
+}
+
+.quantum-canvas:active {
+  cursor: grabbing;
+}
+
+/* Canvas Controls */
+.canvas-controls {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  padding: 4px;
+  backdrop-filter: blur(8px);
+}
+
+.zoom-button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoom-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.zoom-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.zoom-display {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  min-width: 40px;
+  text-align: center;
+  padding: 0 8px;
+}
+
+.fit-button {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.fit-button:hover {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: var(--quantum-primary);
+}
+
+/* Performance Overlay */
+.performance-overlay {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(0, 0, 0, 0.8);
+  color: var(--text-secondary);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  backdrop-filter: blur(8px);
+  z-index: 10;
+}
+
+.performance-overlay div {
+  margin-bottom: 2px;
+}
+
+.performance-overlay div:last-child {
+  margin-bottom: 0;
+}
+
+/* Grid Styling */
+.quantum-grid {
+  stroke: var(--border-primary);
+  fill: none;
+  opacity: 0.3;
+}
+
+.quantum-grid-major {
+  stroke-width: 1;
+  opacity: 0.4;
+}
+
+.quantum-grid-minor {
+  stroke-width: 0.5;
+  opacity: 0.2;
+}
+
+/* Wire Styling */
+.quantum-wire {
+  stroke: var(--text-secondary);
+  stroke-width: 2;
+  fill: none;
+}
+
+.quantum-wire-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  fill: var(--text-secondary);
+}
+
+/* Gate Selection Rectangle */
+.selection-rectangle {
+  fill: rgba(96, 239, 255, 0.1);
+  stroke: var(--quantum-primary);
+  stroke-width: 1;
+  stroke-dasharray: 4,4;
+  animation: selection-dash 1s linear infinite;
+}
+
+@keyframes selection-dash {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 8;
+  }
+}
+
+/* Interaction States */
+.canvas-panning {
+  cursor: grabbing !important;
+}
+
+.canvas-selecting {
+  cursor: crosshair !important;
+}
+
+.canvas-dragging-gate {
+  cursor: grabbing !important;
+}
+
+/* Quantum Field Effects */
+.quantum-field-background {
+  opacity: 0.6;
+  animation: quantum-field-pulse 4s ease-in-out infinite;
+}
+
+@keyframes quantum-field-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Particle Animation */
+.quantum-particle {
+  fill: var(--quantum-primary);
+  opacity: 0.8;
+  animation: quantum-particle-flow 2s ease-in-out infinite;
+}
+
+@keyframes quantum-particle-flow {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+/* Wave Amplitude Visualization */
+.quantum-wave {
+  stroke: var(--quantum-primary);
+  stroke-width: 3;
+  fill: none;
+  opacity: 0.6;
+  animation: quantum-wave-propagation 3s ease-in-out infinite;
+}
+
+@keyframes quantum-wave-propagation {
+  0% {
+    stroke-dasharray: 0, 1000;
+  }
+  100% {
+    stroke-dasharray: 1000, 0;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .canvas-controls {
+    top: 8px;
+    right: 8px;
+    gap: 8px;
+  }
+  
+  .zoom-button {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+  
+  .fit-button {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  
+  .performance-overlay {
+    top: 8px;
+    left: 8px;
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+}
+
+/* Touch Support */
+@media (pointer: coarse) {
+  .quantum-canvas {
+    cursor: default;
+  }
+  
+  .zoom-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* High DPI Support */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .quantum-canvas {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Dark Mode Adjustments */
+@media (prefers-color-scheme: dark) {
+  .zoom-controls,
+  .fit-button {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .performance-overlay {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .quantum-canvas,
+  .zoom-button,
+  .fit-button {
+    transition: none;
+  }
+  
+  .quantum-field-background,
+  .quantum-particle,
+  .quantum-wave,
+  .selection-rectangle {
+    animation: none;
+  }
+}

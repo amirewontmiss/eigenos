@@ -1,0 +1,347 @@
+.quantum-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  overflow: hidden;
+  outline: none;
+  text-decoration: none;
+  background: transparent;
+}
+
+/* Button Sizes */
+.quantum-button--small {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+.quantum-button--medium {
+  height: 40px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+
+.quantum-button--large {
+  height: 48px;
+  padding: 0 24px;
+  font-size: 16px;
+  border-radius: 10px;
+}
+
+/* Button Variants */
+.quantum-button--primary {
+  background: linear-gradient(135deg, var(--quantum-primary), var(--quantum-secondary));
+  color: var(--text-primary);
+  box-shadow: 
+    0 4px 16px rgba(96, 239, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.quantum-button--primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 6px 20px rgba(96, 239, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.quantum-button--secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.quantum-button--secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(96, 239, 255, 0.4);
+}
+
+.quantum-button--ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+}
+
+.quantum-button--ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.quantum-button--danger {
+  background: linear-gradient(135deg, var(--quantum-danger), hsl(0, 80%, 50%));
+  color: white;
+  box-shadow: 
+    0 4px 16px rgba(255, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.quantum-button--success {
+  background: linear-gradient(135deg, var(--quantum-success), hsl(120, 80%, 50%));
+  color: white;
+  box-shadow: 
+    0 4px 16px rgba(0, 255, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Button States */
+.quantum-button--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.quantum-button--loading {
+  cursor: wait;
+  color: transparent;
+}
+
+.quantum-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Quantum Field Background */
+.quantum-button-field {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.quantum-button--state-superposition .quantum-button-field {
+  background: linear-gradient(
+    45deg,
+    hsla(180, 100%, 70%, 0.1) 0%,
+    hsla(300, 100%, 70%, 0.1) 50%,
+    hsla(180, 100%, 70%, 0.1) 100%
+  );
+  animation: quantum-superposition-pulse 2s ease-in-out infinite;
+}
+
+.quantum-button--state-entangled .quantum-button-field {
+  background: radial-gradient(
+    circle at 30% 30%,
+    hsla(45, 100%, 65%, 0.1) 0%,
+    transparent 70%
+  ),
+  radial-gradient(
+    circle at 70% 70%,
+    hsla(225, 100%, 65%, 0.1) 0%,
+    transparent 70%
+  );
+  animation: quantum-entanglement-pulse 1.5s ease-in-out infinite alternate;
+}
+
+/* Button Content */
+.quantum-button-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quantum-button--with-icon.quantum-button--small .quantum-button-content {
+  gap: 6px;
+}
+
+.quantum-button--with-icon.quantum-button--large .quantum-button-content {
+  gap: 10px;
+}
+
+/* Icon Styles */
+.quantum-button-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.quantum-button--small .quantum-button-icon {
+  font-size: 16px;
+}
+
+.quantum-button--medium .quantum-button-icon {
+  font-size: 18px;
+}
+
+.quantum-button--large .quantum-button-icon {
+  font-size: 20px;
+}
+
+/* Loading Spinner */
+.quantum-button-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: quantum-spin 1s linear infinite;
+}
+
+.quantum-button--large .quantum-button-spinner {
+  width: 20px;
+  height: 20px;
+}
+
+/* Quantum State Indicators */
+.quantum-state-indicator {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.quantum-state-indicator--superposition {
+  background: var(--quantum-primary);
+  animation: quantum-pulse 1.5s ease-in-out infinite;
+}
+
+.quantum-state-indicator--entangled {
+  background: var(--quantum-correlated);
+  animation: quantum-double-pulse 2s ease-in-out infinite;
+}
+
+/* Ripple Effect */
+.quantum-button-ripple {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at var(--ripple-x, 50%) var(--ripple-y, 50%),
+    rgba(255, 255, 255, 0.2) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.quantum-button:active:not(:disabled) .quantum-button-ripple {
+  opacity: 1;
+  transform: scale(2);
+  transition-duration: 0.1s;
+}
+
+/* Animations */
+@keyframes quantum-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes quantum-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes quantum-double-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes quantum-superposition-pulse {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes quantum-entanglement-pulse {
+  0% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(1.05);
+  }
+}
+
+/* Focus States */
+.quantum-button:focus-visible {
+  outline: 2px solid var(--quantum-primary);
+  outline-offset: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .quantum-button--large {
+    height: 44px;
+    padding: 0 20px;
+  }
+  
+  .quantum-button--medium {
+    height: 36px;
+    padding: 0 14px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .quantum-button {
+    transition: none;
+  }
+  
+  .quantum-button:hover:not(:disabled) {
+    transform: none;
+  }
+  
+  .quantum-button:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+  
+  .quantum-button-spinner,
+  .quantum-state-indicator--superposition,
+  .quantum-state-indicator--entangled,
+  .quantum-button--state-superposition .quantum-button-field,
+  .quantum-button--state-entangled .quantum-button-field {
+    animation: none;
+  }
+}

@@ -1,0 +1,195 @@
+.quantum-surface {
+  position: relative;
+  background: rgba(255, 255, 255, var(--surface-opacity, 0.05));
+  backdrop-filter: blur(var(--surface-blur, 16px)) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, var(--border-opacity, 0.1));
+  border-radius: var(--border-radius, 12px);
+  box-shadow: 
+    0 var(--shadow-distance, 8px) var(--shadow-blur, 32px) rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Surface Variants */
+.quantum-surface--primary {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.quantum-surface--secondary {
+  background: rgba(96, 239, 255, 0.03);
+  border-color: rgba(96, 239, 255, 0.15);
+}
+
+.quantum-surface--elevated {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 12px 48px rgba(0, 0, 0, 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.quantum-surface--floating {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.2),
+    0 8px 24px rgba(0, 0, 0, 0.15),
+    inset 0 2px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Interactive States */
+.quantum-surface--interactive {
+  cursor: pointer;
+}
+
+.quantum-surface--interactive:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(96, 239, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 16px 48px rgba(0, 0, 0, 0.15),
+    0 6px 20px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.quantum-surface--interactive:active {
+  transform: translateY(0);
+  transition-duration: 0.1s;
+}
+
+/* Quantum Field Overlays */
+.quantum-field-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.quantum-field-overlay--superposition {
+  background: linear-gradient(
+    45deg,
+    hsla(180, 100%, 70%, 0.05) 0%,
+    hsla(300, 100%, 70%, 0.05) 50%,
+    hsla(180, 100%, 70%, 0.05) 100%
+  );
+  animation: quantum-superposition 4s ease-in-out infinite;
+}
+
+.quantum-field-overlay--entangled {
+  background: radial-gradient(
+    circle at 30% 30%,
+    hsla(45, 100%, 65%, 0.08) 0%,
+    transparent 50%
+  ),
+  radial-gradient(
+    circle at 70% 70%,
+    hsla(225, 100%, 65%, 0.08) 0%,
+    transparent 50%
+  );
+  animation: quantum-entanglement 3s ease-in-out infinite alternate;
+}
+
+.quantum-field-overlay--decoherent {
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    hsla(0, 0%, 50%, 0.02) 1px,
+    hsla(0, 0%, 50%, 0.02) 2px,
+    transparent 3px
+  );
+  animation: quantum-decoherence 2s linear infinite;
+}
+
+/* Surface Content */
+.quantum-surface-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+}
+
+/* Interaction Layer */
+.quantum-surface-interaction-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(96, 239, 255, 0.1) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.quantum-surface--interactive:hover .quantum-surface-interaction-layer {
+  opacity: 1;
+}
+
+/* Quantum Animations */
+@keyframes quantum-superposition {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes quantum-entanglement {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  100% {
+    transform: rotate(5deg) scale(1.01);
+  }
+}
+
+@keyframes quantum-decoherence {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(4px);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .quantum-surface {
+    border-radius: 8px;
+  }
+  
+  .quantum-surface--elevated {
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.12),
+      0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .quantum-surface {
+    transition: none;
+  }
+  
+  .quantum-field-overlay--superposition,
+  .quantum-field-overlay--entangled,
+  .quantum-field-overlay--decoherent {
+    animation: none;
+  }
+  
+  .quantum-surface--interactive:hover {
+    transform: none;
+  }
+}

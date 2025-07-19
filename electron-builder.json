@@ -1,11 +1,13 @@
 {
   "appId": "com.quantumos.app",
   "productName": "QuantumOS",
+  "electronVersion": "28.0.0",
   "directories": {
     "output": "release"
   },
   "files": [
-    "dist/**/*",
+    "src/main-simple.js",
+    "renderer/**/*",
     "assets/**/*",
     "package.json"
   ],
@@ -51,7 +53,6 @@
         "arch": ["x64"]
       }
     ],
-    "icon": "assets/icon.png",
     "category": "Science"
   },
   "nsis": {

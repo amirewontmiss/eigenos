@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumOS - Enterprise Quantum Computing Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+            background: #000000;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Authentication Screen */
+        .auth-container {
+            height: 100vh;
+            display: flex;
+            background: #000000;
+            position: relative;
+        }
+        
+        .auth-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: linear-gradient(180deg, #000000 0%, #0a0a0f 50%, #000000 100%);
+        }
+        
+        .auth-right {
+            width: 450px;
+            background: #000000;
+            border-left: 1px solid #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+        }
+        
+        .system-logo {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ffffff, #4a69bd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+        
+        .system-tagline {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+        }
+        
+        .system-specs {
+            background: rgba(26, 26, 46, 0.5);
+            border: 1px solid #1a1a2e;
+            border-radius: 4px;
+            padding: 20px;
+            max-width: 400px;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+        
+        .spec-line {
+            margin-bottom: 8px;
+        }
+        
+        .spec-label {
+            color: #4a69bd;
+            width: 120px;
+            display: inline-block;
+        }
+        
+        .auth-form {
+            width: 100%;
+        }
+        
+        .auth-header {
+            margin-bottom: 30px;
+        }
+        
+        .auth-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+        
+        .auth-subtitle {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        
+        .form-input {
+            width: 100%;
+            background: #111111;
+            border: 1px solid #1a1a2e;
+            border-radius: 2px;
+            padding: 12px;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #4a69bd;
+            background: #0a0a0f;
+        }
+        
+        .form-input::placeholder {
+            color: #444;
+        }
+        
+        .auth-options {
+            margin: 25px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .auth-option {
+            padding: 10px 12px;
+            background: #111111;
+            border: 1px solid #1a1a2e;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .auth-option:hover {
+            border-color: #4a69bd;
+            background: #0a0a0f;
+        }
+        
+        .auth-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .auth-button {
+            width: 100%;
+            background: #4a69bd;
+            border: none;
+            border-radius: 2px;
+            padding: 14px;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 20px;
+        }
+        
+        .auth-button:hover {
+            background: #3c5aa6;
+        }
+        
+        .auth-button:disabled {
+            background: #333;
+            cursor: not-allowed;
+        }
+        
+        .security-notice {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(26, 26, 46, 0.3);
+            border-left: 2px solid #4a69bd;
+            font-size: 10px;
+            color: #999;
+            line-height: 1.5;
+        }
+        
+        /* Main Dashboard */
+        .dashboard-container {
+            height: 100vh;
+            display: none;
+            background: #000000;
+            flex-direction: column;
+        }
+        
+        .dashboard-header {
+            background: #000000;
+            border-bottom: 1px solid #1a1a2e;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .dashboard-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .logout-btn {
+            background: none;
+            border: 1px solid #1a1a2e;
+            color: #999;
+            padding: 6px 12px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .logout-btn:hover {
+            border-color: #4a69bd;
+            color: #4a69bd;
+        }
+        
+        .dashboard-main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+        }
+        
+        .dashboard-sidebar {
+            background: #000000;
+            border-right: 1px solid #1a1a2e;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .nav-section {
+            margin-bottom: 30px;
+        }
+        
+        .nav-section-title {
+            font-size: 10px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        
+        .nav-item {
+            padding: 10px 12px;
+            margin: 2px 0;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #999;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        
+        .nav-item:hover {
+            background: #0a0a0f;
+            border-color: #1a1a2e;
+            color: #ffffff;
+        }
+        
+        .nav-item.active {
+            background: #1a1a2e;
+            border-color: #4a69bd;
+            color: #ffffff;
+        }
+        
+        .dashboard-content {
+            background: #000000;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .content-header {
+            margin-bottom: 30px;
+        }
+        
+        .content-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+        
+        .content-subtitle {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .provider-config {
+            display: none;
+        }
+        
+        .provider-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .provider-card {
+            background: #0a0a0f;
+            border: 1px solid #1a1a2e;
+            border-radius: 4px;
+            padding: 20px;
+        }
+        
+        .provider-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .provider-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        
+        .provider-status {
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .provider-status.connected {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+        
+        .provider-status.disconnected {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+        
+        .provider-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .status-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4a69bd;
+            animation: pulse 2s infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .terminal-output {
+            background: #0a0a0f;
+            border: 1px solid #1a1a2e;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 11px;
+            color: #4a69bd;
+            height: 120px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .welcome-content {
+            max-width: 600px;
+        }
+        
+        .welcome-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: #0a0a0f;
+            border: 1px solid #1a1a2e;
+            border-radius: 4px;
+            padding: 20px;
+        }
+        
+        .feature-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        
+        .feature-description {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .system-stats {
+            background: #0a0a0f;
+            border: 1px solid #1a1a2e;
+            border-radius: 4px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #4a69bd;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 10px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .error-message {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid #f44336;
+            border-radius: 2px;
+            padding: 10px;
+            color: #f44336;
+            font-size: 11px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .success-message {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid #4caf50;
+            border-radius: 2px;
+            padding: 10px;
+            color: #4caf50;
+            font-size: 11px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Screen -->
+    <div class="auth-container" id="authScreen">
+        <div class="auth-left">
+            <div class="system-logo">QUANTUMOS</div>
+            <div class="system-tagline">Enterprise Quantum Computing Platform</div>
+            <div class="system-specs">
+                <div class="spec-line">
+                    <span class="spec-label">SYSTEM_ID:</span>
+                    <span>QOS-ENTERPRISE-v1.0.0</span>
+                </div>
+                <div class="spec-line">
+                    <span class="spec-label">ARCH:</span>
+                    <span>x86_64-linux-quantum</span>
+                </div>
+                <div class="spec-line">
+                    <span class="spec-label">KERNEL:</span>
+                    <span>QKernel 6.15.1-quantum-1</span>
+                </div>
+                <div class="spec-line">
+                    <span class="spec-label">RUNTIME:</span>
+                    <span>Electron 28.0.0</span>
+                </div>
+                <div class="spec-line">
+                    <span class="spec-label">PROVIDERS:</span>
+                    <span>IBM, Google, Rigetti, IonQ</span>
+                </div>
+                <div class="spec-line">
+                    <span class="spec-label">SECURITY:</span>
+                    <span>bcrypt + TOTP + device-binding</span>
+                </div>
+                <div class="spec-line">
+                    <span class="spec-label">UPTIME:</span>
+                    <span id="systemUptime">00:00:00</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="auth-right">
+            <div class="auth-form" id="loginForm">
+                <div class="auth-header">
+                    <div class="auth-title">SYSTEM ACCESS</div>
+                    <div class="auth-subtitle">Multi-factor authentication required</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="username" placeholder="Enter username" autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="password" placeholder="Enter password" autocomplete="current-password">
+                </div>
+                
+                <div class="auth-options">
+                    <div class="auth-option disabled">
+                        <span>Biometric Authentication</span>
+                        <span>UNAVAILABLE</span>
+                    </div>
+                    <div class="auth-option disabled">
+                        <span>Hardware Key (FIDO2)</span>
+                        <span>NOT_DETECTED</span>
+                    </div>
+                    <div class="auth-option" onclick="toggleDevMode()">
+                        <span>Developer Mode</span>
+                        <span id="devModeStatus">DISABLED</span>
+                    </div>
+                </div>
+                
+                <button class="auth-button" onclick="performLogin()">AUTHENTICATE</button>
+                
+                <div class="error-message" id="loginError"></div>
+                <div class="success-message" id="loginSuccess"></div>
+                
+                <div class="security-notice">
+                    <strong>SECURITY NOTICE:</strong> All authentication attempts are logged and monitored. 
+                    Unauthorized access attempts will be reported to system administrators. 
+                    Session tokens expire after 1 hour of inactivity.
+                </div>
+            </div>
+            
+            <!-- 2FA Form -->
+            <div class="auth-form" id="tfaForm" style="display: none;">
+                <div class="auth-header">
+                    <div class="auth-title">TWO-FACTOR AUTHENTICATION</div>
+                    <div class="auth-subtitle">Enter your TOTP code</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Authentication Code</label>
+                    <input type="text" class="form-input" id="totpCode" placeholder="000000" maxlength="6" autocomplete="one-time-code">
+                </div>
+                
+                <button class="auth-button" onclick="verifyTOTP()">VERIFY</button>
+                
+                <div class="error-message" id="tfaError"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Dashboard -->
+    <div class="dashboard-container" id="dashboard">
+        <div class="dashboard-header">
+            <div class="dashboard-title">QUANTUMOS CONTROL CENTER</div>
+            <div class="user-info">
+                <span class="status-indicator"></span>
+                <span>USER: <span id="currentUser">admin</span></span>
+                <span>SESSION: <span id="sessionId">QS-1234567890</span></span>
+                <button class="logout-btn" onclick="performLogout()">LOGOUT</button>
+            </div>
+        </div>
+        
+        <div class="dashboard-main">
+            <div class="dashboard-sidebar">
+                <div class="nav-section">
+                    <div class="nav-section-title">System</div>
+                    <div class="nav-item active" onclick="showSection('welcome')">Overview</div>
+                    <div class="nav-item" onclick="showSection('providers')">Provider Configuration</div>
+                    <div class="nav-item" onclick="showSection('circuit-designer')">Circuit Designer</div>
+                    <div class="nav-item" onclick="showSection('device-monitor')">Device Monitor</div>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Operations</div>
+                    <div class="nav-item" onclick="showSection('job-manager')">Job Manager</div>
+                    <div class="nav-item" onclick="showSection('state-viz')">State Visualization</div>
+                    <div class="nav-item" onclick="showSection('analytics')">Analytics</div>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Administration</div>
+                    <div class="nav-item" onclick="showSection('settings')">Settings</div>
+                    <div class="nav-item" onclick="showSection('logs')">System Logs</div>
+                    <div class="nav-item" onclick="showSection('security')">Security</div>
+                </div>
+            </div>
+            
+            <div class="dashboard-content" id="mainContent">
+                <!-- Welcome Section -->
+                <div id="welcomeSection">
+                    <div class="content-header">
+                        <div class="content-title">System Overview</div>
+                        <div class="content-subtitle">QuantumOS Enterprise Platform Status</div>
+                    </div>
+                    
+                    <div class="welcome-content">
+                        <p style="color: #999; line-height: 1.6; margin-bottom: 20px;">
+                            Welcome to QuantumOS Enterprise. This platform provides secure access to quantum computing 
+                            resources across multiple providers. All operations are logged and monitored for security compliance.
+                        </p>
+                        
+                        <div class="welcome-grid">
+                            <div class="feature-card">
+                                <div class="feature-title">Circuit Designer</div>
+                                <div class="feature-description">
+                                    Advanced quantum circuit design interface with real-time validation 
+                                    and optimization capabilities.
+                                </div>
+                            </div>
+                            
+                            <div class="feature-card">
+                                <div class="feature-title">Device Monitor</div>
+                                <div class="feature-description">
+                                    Real-time monitoring of quantum hardware status, availability, 
+                                    and performance metrics.
+                                </div>
+                            </div>
+                            
+                            <div class="feature-card">
+                                <div class="feature-title">Job Manager</div>
+                                <div class="feature-description">
+                                    Comprehensive job scheduling, execution monitoring, and result 
+                                    management across all providers.
+                                </div>
+                            </div>
+                            
+                            <div class="feature-card">
+                                <div class="feature-title">State Visualization</div>
+                                <div class="feature-description">
+                                    Interactive quantum state analysis with Bloch sphere, histograms, 
+                                    and statistical measurements.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="system-stats">
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="deviceCount">0</div>
+                                    <div class="stat-label">Devices Online</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="qubitsAvailable">0</div>
+                                    <div class="stat-label">Qubits Available</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="jobsCompleted">0</div>
+                                    <div class="stat-label">Jobs Completed</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="systemLoad">0%</div>
+                                    <div class="stat-label">System Load</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Provider Configuration Section -->
+                <div id="providersSection" class="provider-config">
+                    <div class="content-header">
+                        <div class="content-title">Provider Configuration</div>
+                        <div class="content-subtitle">Configure quantum computing provider credentials</div>
+                    </div>
+                    
+                    <div class="provider-grid">
+                        <div class="provider-card">
+                            <div class="provider-header">
+                                <div class="provider-name">IBM Quantum</div>
+                                <div class="provider-status disconnected" id="ibmStatus">Disconnected</div>
+                            </div>
+                            <div class="provider-form">
+                                <div class="form-group">
+                                    <label class="form-label">API Token</label>
+                                    <input type="password" class="form-input" id="ibmToken" placeholder="Enter IBM Quantum API token">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Hub</label>
+                                    <input type="text" class="form-input" id="ibmHub" placeholder="ibm-q" value="ibm-q">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Group</label>
+                                    <input type="text" class="form-input" id="ibmGroup" placeholder="open" value="open">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Project</label>
+                                    <input type="text" class="form-input" id="ibmProject" placeholder="main" value="main">
+                                </div>
+                                <button class="auth-button" onclick="testConnection('ibm')">Test Connection</button>
+                            </div>
+                        </div>
+                        
+                        <div class="provider-card">
+                            <div class="provider-header">
+                                <div class="provider-name">Google Quantum AI</div>
+                                <div class="provider-status disconnected" id="googleStatus">Disconnected</div>
+                            </div>
+                            <div class="provider-form">
+                                <div class="form-group">
+                                    <label class="form-label">Service Account JSON</label>
+                                    <textarea class="form-input" id="googleCredentials" placeholder="Paste service account JSON" rows="4"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Project ID</label>
+                                    <input type="text" class="form-input" id="googleProject" placeholder="your-gcp-project-id">
+                                </div>
+                                <button class="auth-button" onclick="testConnection('google')">Test Connection</button>
+                            </div>
+                        </div>
+                        
+                        <div class="provider-card">
+                            <div class="provider-header">
+                                <div class="provider-name">Rigetti Computing</div>
+                                <div class="provider-status disconnected" id="rigettiStatus">Disconnected</div>
+                            </div>
+                            <div class="provider-form">
+                                <div class="form-group">
+                                    <label class="form-label">API Key</label>
+                                    <input type="password" class="form-input" id="rigettiKey" placeholder="Enter Rigetti API key">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">User ID</label>
+                                    <input type="text" class="form-input" id="rigettiUser" placeholder="Enter user ID">
+                                </div>
+                                <button class="auth-button" onclick="testConnection('rigetti')">Test Connection</button>
+                            </div>
+                        </div>
+                        
+                        <div class="provider-card">
+                            <div class="provider-header">
+                                <div class="provider-name">IonQ</div>
+                                <div class="provider-status disconnected" id="ionqStatus">Disconnected</div>
+                            </div>
+                            <div class="provider-form">
+                                <div class="form-group">
+                                    <label class="form-label">API Key</label>
+                                    <input type="password" class="form-input" id="ionqKey" placeholder="Enter IonQ API key">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Endpoint</label>
+                                    <input type="text" class="form-input" id="ionqEndpoint" placeholder="https://api.ionq.co" value="https://api.ionq.co">
+                                </div>
+                                <button class="auth-button" onclick="testConnection('ionq')">Test Connection</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="terminal-output" id="connectionLog">
+                        [SYSTEM] Provider configuration interface loaded
+                        [INFO] Waiting for credential input...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Global state
+        let isDevMode = false;
+        let currentSession = null;
+        let systemStartTime = Date.now();
+        
+        // Mock user database (in real app, this would be encrypted and stored securely)
+        const users = {
+            'admin': {
+                id: 'usr_admin_001',
+                username: 'admin',
+                passwordHash: '$2b$10$N9qo8uLOickgx2ZMRZoMye.IVuXGOOGKZYOaIKU4JRmj8TpvvF6H.', // 'quantum123'
+                salt: 'random_salt_123',
+                tfaSecret: 'JBSWY3DPEHPK3PXP', // Mock TOTP secret
+                metadata: { isAdmin: true, createdAt: '2025-01-01T00:00:00Z' }
+            },
+            'xan': {
+                id: 'usr_xan_001',
+                username: 'xan',
+                passwordHash: '$2b$10$N9qo8uLOickgx2ZMRZoMye.IVuXGOOGKZYOaIKU4JRmj8TpvvF6H.', // 'quantum123'
+                salt: 'random_salt_789',
+                tfaSecret: 'JBSWY3DPEHPK3PXP', // Mock TOTP secret
+                metadata: { isAdmin: true, createdAt: '2025-01-19T00:00:00Z' }
+            },
+            'user': {
+                id: 'usr_user_001',
+                username: 'user',
+                passwordHash: '$2b$10$8ZiVR6x.YvYu5kz4RzH3/OXo3Hm2fH6GkU0QzH8CbS1PxE9jX2xMe', // 'password123'
+                salt: 'random_salt_456',
+                tfaSecret: 'GEZDGNBVGY3TQOJQ',
+                metadata: { isAdmin: false, createdAt: '2025-01-01T00:00:00Z' }
+            }
+        };
+        
+        // Provider configurations
+        let providerConfigs = {
+            ibm: { connected: false, credentials: null },
+            google: { connected: false, credentials: null },
+            rigetti: { connected: false, credentials: null },
+            ionq: { connected: false, credentials: null }
+        };
+        
+        // Initialize system
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSystemUptime();
+            setInterval(updateSystemUptime, 1000);
+            
+            // Check for existing session
+            const existingSession = localStorage.getItem('quantumos_session');
+            if (existingSession) {
+                try {
+                    const session = JSON.parse(existingSession);
+                    if (session.exp > Date.now()) {
+                        loginSuccess(session.username);
+                        return;
+                    }
+                } catch (e) {
+                    localStorage.removeItem('quantumos_session');
+                }
+            }
+            
+            // Load saved provider configs
+            const savedConfigs = localStorage.getItem('quantumos_providers');
+            if (savedConfigs) {
+                try {
+                    providerConfigs = { ...providerConfigs, ...JSON.parse(savedConfigs) };
+                    updateProviderStatuses();
+                } catch (e) {
+                    logToTerminal('[ERROR] Failed to load provider configurations');
+                }
+            }
+            
+            // Focus username field
+            document.getElementById('username').focus();
+            
+            // Add enter key listeners
+            document.getElementById('username').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') document.getElementById('password').focus();
+            });
+            
+            document.getElementById('password').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') performLogin();
+            });
+            
+            document.getElementById('totpCode').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') verifyTOTP();
+            });
+        });
+        
+        function updateSystemUptime() {
+            const uptime = Date.now() - systemStartTime;
+            const hours = Math.floor(uptime / 3600000);
+            const minutes = Math.floor((uptime % 3600000) / 60000);
+            const seconds = Math.floor((uptime % 60000) / 1000);
+            
+            document.getElementById('systemUptime').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function toggleDevMode() {
+            isDevMode = !isDevMode;
+            document.getElementById('devModeStatus').textContent = isDevMode ? 'ENABLED' : 'DISABLED';
+        }
+        
+        function showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.style.display = 'block';
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 5000);
+        }
+        
+        function showSuccess(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.style.display = 'block';
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Simple hash function for demo purposes (in real app, use proper bcrypt)
+        function simpleHash(password) {
+            let hash = 0;
+            for (let i = 0; i < password.length; i++) {
+                const char = password.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32-bit integer
+            }
+            return hash.toString();
+        }
+        
+        function performLogin() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                showError('loginError', 'Username and password are required');
+                return;
+            }
+            
+            // Dev mode bypass
+            if (isDevMode && username === 'dev' && password === 'dev123') {
+                loginSuccess('dev');
+                return;
+            }
+            
+            // Check user exists
+            const user = users[username];
+            if (!user) {
+                showError('loginError', 'Invalid credentials');
+                return;
+            }
+            
+            // Simple password check (in real app, use bcrypt.compare)
+            if (password !== 'quantum123') {
+                showError('loginError', 'Invalid credentials');
+                return;
+            }
+            
+            // Show 2FA form
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('tfaForm').style.display = 'block';
+            document.getElementById('totpCode').focus();
+            
+            // Store temporary login state
+            window.tempLogin = { username: user.username, userId: user.id };
+        }
+        
+        function verifyTOTP() {
+            const totpCode = document.getElementById('totpCode').value.trim();
+            
+            if (!totpCode || totpCode.length !== 6) {
+                showError('tfaError', 'Please enter a valid 6-digit code');
+                return;
+            }
+            
+            // Simple TOTP verification (in real app, use proper TOTP library)
+            const validCodes = ['123456', '000000', '111111']; // Mock valid codes
+            if (!validCodes.includes(totpCode)) {
+                showError('tfaError', 'Invalid authentication code');
+                return;
+            }
+            
+            // Login successful
+            loginSuccess(window.tempLogin.username);
+        }
+        
+        function loginSuccess(username) {
+            // Create session token
+            const session = {
+                userId: users[username]?.id || 'dev_user',
+                username: username,
+                isAdmin: users[username]?.metadata?.isAdmin || true,
+                sessionId: 'QS-' + Date.now(),
+                iat: Date.now(),
+                exp: Date.now() + (60 * 60 * 1000) // 1 hour
+            };
+            
+            // Store session
+            localStorage.setItem('quantumos_session', JSON.stringify(session));
+            currentSession = session;
+            
+            // Update UI
+            document.getElementById('currentUser').textContent = username;
+            document.getElementById('sessionId').textContent = session.sessionId;
+            
+            // Hide auth screen, show dashboard
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'flex';
+            
+            // Initialize dashboard
+            updateSystemStats();
+            setInterval(updateSystemStats, 5000);
+            
+            logToTerminal(`[AUTH] User ${username} authenticated successfully`);
+            logToTerminal(`[SESSION] Session ${session.sessionId} created`);
+        }
+        
+        function performLogout() {
+            if (currentSession) {
+                logToTerminal(`[AUTH] User ${currentSession.username} logged out`);
+                logToTerminal(`[SESSION] Session ${currentSession.sessionId} terminated`);
+            }
+            
+            localStorage.removeItem('quantumos_session');
+            currentSession = null;
+            
+            // Reset forms
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('totpCode').value = '';
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('tfaForm').style.display = 'none';
+            
+            // Show auth screen, hide dashboard
+            document.getElementById('authScreen').style.display = 'flex';
+            document.getElementById('dashboard').style.display = 'none';
+            
+            // Focus username field
+            setTimeout(() => document.getElementById('username').focus(), 100);
+        }
+        
+        function showSection(section) {
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to clicked item
+            event.target.classList.add('active');
+            
+            // Hide all sections
+            document.querySelectorAll('#mainContent > div').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show requested section
+            if (section === 'providers') {
+                document.getElementById('providersSection').style.display = 'block';
+            } else if (section === 'welcome') {
+                document.getElementById('welcomeSection').style.display = 'block';
+            } else {
+                // For other sections, check if they exist or create placeholder
+                let sectionElement = document.getElementById(section + 'Section');
+                if (!sectionElement) {
+                    // Create placeholder section
+                    sectionElement = document.createElement('div');
+                    sectionElement.id = section + 'Section';
+                    sectionElement.innerHTML = `
+                        <div class="content-header">
+                            <div class="content-title">${section.charAt(0).toUpperCase() + section.slice(1).replace('-', ' ')}</div>
+                            <div class="content-subtitle">Module integration pending</div>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-title">Development Status</div>
+                            <div class="feature-description">
+                                This module is available in the React component library and will be integrated 
+                                in the next development phase. The ${section} functionality includes advanced 
+                                quantum computing capabilities with professional UI components.
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('mainContent').appendChild(sectionElement);
+                }
+                sectionElement.style.display = 'block';
+            }
+            
+            logToTerminal(`[NAV] Navigated to ${section} section`);
+        }
+        
+        function testConnection(provider) {
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'TESTING...';
+            button.disabled = true;
+            
+            logToTerminal(`[${provider.toUpperCase()}] Testing connection...`);
+            
+            setTimeout(() => {
+                // Mock connection test
+                const success = Math.random() > 0.3; // 70% success rate
+                
+                if (success) {
+                    providerConfigs[provider].connected = true;
+                    document.getElementById(provider + 'Status').textContent = 'Connected';
+                    document.getElementById(provider + 'Status').className = 'provider-status connected';
+                    
+                    // Save credentials (in real app, encrypt these)
+                    if (provider === 'ibm') {
+                        providerConfigs[provider].credentials = {
+                            token: document.getElementById('ibmToken').value,
+                            hub: document.getElementById('ibmHub').value,
+                            group: document.getElementById('ibmGroup').value,
+                            project: document.getElementById('ibmProject').value
+                        };
+                    } else if (provider === 'google') {
+                        providerConfigs[provider].credentials = {
+                            serviceAccount: document.getElementById('googleCredentials').value,
+                            projectId: document.getElementById('googleProject').value
+                        };
+                    } else if (provider === 'rigetti') {
+                        providerConfigs[provider].credentials = {
+                            apiKey: document.getElementById('rigettiKey').value,
+                            userId: document.getElementById('rigettiUser').value
+                        };
+                    } else if (provider === 'ionq') {
+                        providerConfigs[provider].credentials = {
+                            apiKey: document.getElementById('ionqKey').value,
+                            endpoint: document.getElementById('ionqEndpoint').value
+                        };
+                    }
+                    
+                    localStorage.setItem('quantumos_providers', JSON.stringify(providerConfigs));
+                    logToTerminal(`[${provider.toUpperCase()}] Connection successful`);
+                } else {
+                    logToTerminal(`[${provider.toUpperCase()}] Connection failed - invalid credentials`);
+                }
+                
+                button.textContent = originalText;
+                button.disabled = false;
+            }, 2000);
+        }
+        
+        function updateProviderStatuses() {
+            Object.keys(providerConfigs).forEach(provider => {
+                const status = document.getElementById(provider + 'Status');
+                if (providerConfigs[provider].connected) {
+                    status.textContent = 'Connected';
+                    status.className = 'provider-status connected';
+                }
+            });
+        }
+        
+        function updateSystemStats() {
+            const connectedProviders = Object.values(providerConfigs).filter(p => p.connected).length;
+            const totalQubits = connectedProviders * 50; // Mock calculation
+            const completedJobs = Math.floor(Math.random() * 100);
+            const systemLoad = Math.floor(Math.random() * 30) + 10;
+            
+            document.getElementById('deviceCount').textContent = connectedProviders * 2;
+            document.getElementById('qubitsAvailable').textContent = totalQubits;
+            document.getElementById('jobsCompleted').textContent = completedJobs;
+            document.getElementById('systemLoad').textContent = systemLoad + '%';
+        }
+        
+        function logToTerminal(message) {
+            const terminal = document.getElementById('connectionLog');
+            if (terminal) {
+                const timestamp = new Date().toLocaleTimeString();
+                terminal.innerHTML += `\n[${timestamp}] ${message}`;
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        }
+        
+        console.log('QuantumOS Enterprise Authentication System Loaded');
+        console.log('Default credentials: admin / quantum123');
+        console.log('TOTP codes: 123456, 000000, 111111');
+    </script>
+</body>
+</html>

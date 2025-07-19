@@ -290,6 +290,45 @@ export function validateConfig(): void {
     console.warn('No quantum providers configured. Only simulator mode will be available.');
   }
 
+  // Validate IBM Quantum configuration if enabled
+  const ibmConfig = config.quantumProviders.ibm;
+  if (ibmConfig.token) {
+    if (ibmConfig.token.length < 50) {
+      errors.push('IBM_QUANTUM_TOKEN appears to be invalid (too short)');
+    }
+    if (!ibmConfig.token.startsWith('ibmq_')) {
+      console.warn('IBM_QUANTUM_TOKEN should typically start with "ibmq_"');
+    }
+  }
+
+  // Validate Google Quantum AI configuration if enabled
+  const googleConfig = config.quantumProviders.google;
+  if (googleConfig.projectId || googleConfig.credentialsPath) {
+    if (!googleConfig.projectId) {
+      errors.push('GOOGLE_CLOUD_PROJECT_ID is required when using Google Quantum AI');
+    }
+    if (!googleConfig.credentialsPath) {
+      errors.push('GOOGLE_CLOUD_CREDENTIALS_PATH is required when using Google Quantum AI');
+    }
+  }
+
+  // Validate Rigetti configuration if enabled
+  const rigettiConfig = config.quantumProviders.rigetti;
+  if (rigettiConfig.apiKey || rigettiConfig.userId) {
+    if (!rigettiConfig.apiKey) {
+      errors.push('RIGETTI_API_KEY is required when using Rigetti QCS');
+    }
+    if (!rigettiConfig.userId) {
+      errors.push('RIGETTI_USER_ID is required when using Rigetti QCS');
+    }
+  }
+
+  // Validate IonQ configuration if enabled
+  const ionqConfig = config.quantumProviders.ionq;
+  if (ionqConfig.apiKey && ionqConfig.apiKey.length < 20) {
+    errors.push('IONQ_API_KEY appears to be invalid (too short)');
+  }
+
   // Validate Python configuration
   if (!config.python.pythonPath) {
     errors.push('PYTHON_PATH must be set');

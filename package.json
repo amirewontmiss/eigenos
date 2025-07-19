@@ -31,7 +31,10 @@
     "db:migrate": "typeorm migration:run",
     "db:revert": "typeorm migration:revert",
     "healthcheck": "node -e \"require('./dist/app.service.js').appService.healthCheck().then(console.log)\"",
-    "maintenance": "node -e \"require('./dist/app.service.js').appService.performMaintenance().then(() => console.log('Maintenance completed'))\""
+    "maintenance": "node -e \"require('./dist/app.service.js').appService.performMaintenance().then(() => console.log('Maintenance completed'))\"",
+    "setup-quantum": "./scripts/quantum-provider-setup.sh",
+    "validate-providers": "node scripts/validate-providers.js",
+    "quantum:install": "npm install axios jsonwebtoken && pip install qiskit qiskit-ibm-provider google-auth google-auth-oauthlib google-auth-httplib2"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
